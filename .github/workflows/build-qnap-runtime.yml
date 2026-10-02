@@ -31,7 +31,7 @@ jobs:
       - name: Build and export Runtime
         shell: bash
         run: |
-          DOCKER_BUILDKIT=1 docker build --pull --build-arg DEPENDENCIES_IMAGE=capoo-qnap-dependencies:1.0.0 --tag capoo-qnap-runtime:1.0.1 --file builder/Dockerfile.runtime builder
+          DOCKER_BUILDKIT=1 docker build --build-arg DEPENDENCIES_IMAGE=capoo-qnap-dependencies:1.0.0 --tag capoo-qnap-runtime:1.0.1 --file builder/Dockerfile.runtime builder
           runtime_container="$(docker create capoo-qnap-runtime:1.0.1)"
           mkdir runtime-root
           docker export "$runtime_container" | tar -x -C runtime-root
