@@ -1,0 +1,67 @@
+name: Build pinned QNAP Runtime 1.0.1
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  runtime:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify builder source
+        shell: bash
+        run: |
+          echo "202506d0fded3bcec1fb333093fe8258923bb69947fd6723d235a1ff361d796e  qnap-runtime-builder-1.0.1.zip" | sha256sum --check
+          mkdir builder
+          unzip -q qnap-runtime-builder-1.0.1.zip -d builder
+          chmod 755 builder/pack_module.py
+          sha256sum builder/*
+      - name: Free runner disk space
+        shell: bash
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
+          docker system prune --all --force || true
+          df -h
+      - name: Build dependencies image
+        shell: bash
+        run: |
+          DOCKER_BUILDKIT=1 docker build --pull --tag capoo-qnap-dependencies:1.0.0 --file builder/Dockerfile.dependencies builder
+          docker builder prune --all --force
+      - name: Build and export Runtime
+        shell: bash
+        run: |
+          DOCKER_BUILDKIT=1 docker build --pull --build-arg DEPENDENCIES_IMAGE=capoo-qnap-dependencies:1.0.0 --tag capoo-qnap-runtime:1.0.1 --file builder/Dockerfile.runtime builder
+          runtime_container="$(docker create capoo-qnap-runtime:1.0.1)"
+          mkdir runtime-root
+          docker export "$runtime_container" | tar -x -C runtime-root
+          docker rm "$runtime_container"
+          docker image rm capoo-qnap-runtime:1.0.1 capoo-qnap-dependencies:1.0.0 || true
+          docker builder prune --all --force
+          df -h
+      - name: Pack and verify Runtime
+        shell: bash
+        run: |
+          python3 builder/pack_module.py runtime runtime-root dist/CAPOO-Runtime_1.0.1_x86_64.capoo-update --version 1.0.1
+          sha256sum --check dist/CAPOO-Runtime_1.0.1_x86_64.capoo-update.sha256
+          python3 - <<'PY'
+          import hashlib, json, tarfile
+          from pathlib import Path
+          asset=Path("dist/CAPOO-Runtime_1.0.1_x86_64.capoo-update")
+          with tarfile.open(asset,"r:") as tf:
+              assert tf.getnames()==["manifest.json","payload.tar.gz"]
+              manifest=json.load(tf.extractfile("manifest.json"))
+              payload=tf.extractfile("payload.tar.gz").read()
+          assert (manifest["type"],manifest["version"],manifest["architecture"])==("runtime","1.0.1","x86_64")
+          assert manifest["payload_sha256"]==hashlib.sha256(payload).hexdigest()
+          print(json.dumps({"asset":asset.name,"bytes":asset.stat().st_size,"sha256":hashlib.sha256(asset.read_bytes()).hexdigest(),"files":len(manifest["files"]),"expanded_bytes":manifest["expanded_bytes"]},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CAPOO-Runtime_1.0.1_x86_64
+          path: |
+            dist/CAPOO-Runtime_1.0.1_x86_64.capoo-update
+            dist/CAPOO-Runtime_1.0.1_x86_64.capoo-update.sha256
+          compression-level: 0
+          retention-days: 3
+          if-no-files-found: error
