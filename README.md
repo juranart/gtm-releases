@@ -1,41 +1,43 @@
-# GTM для QNAP
+# GTM releases
 
-Установочные пакеты GTM и каталог приложений QNAP App Center. Пакеты находятся в [GitHub Releases](https://github.com/juranart/gtm-releases/releases).
+Installable GTM packages and stable automatic-update metadata for Windows and QNAP.
 
-## Bootstrap 1.2.18
+## Current stable release
 
-[Bootstrap 1.2.18](https://github.com/juranart/gtm-releases/releases/tag/bootstrap-1.2.18) соответствует версии QPKG **4.2.18**.
+[GTM automatic updates — 2026-10-02](https://github.com/juranart/gtm-releases/releases/tag/gtm-2026.10.02-auto-updates)
 
-Для установленного Bootstrap 1.2.17 и старее выполните первый переход через **App Center → ручная установка** файлом `TelegramMT5CAPOO-bootstrap_1.2.18_x86_64.qpkg`.
+Component versions:
 
-После перехода: **GTM → Система и обновления → Обновление Bootstrap из GitHub**. Нажмите **Проверить обновление → Скачать и проверить → Установить Bootstrap …**. NAS скачивает стабильный QPKG из этого репозитория по HTTPS и проверяет SHA-256, размер и содержимое пакета. Автоматической установки без нажатия кнопки нет. Здесь обновляется **только Bootstrap**, без Core, WebUI, Runtime и Bridge. Уже установленную 1.2.18 повторно устанавливать не нужно.
+- Windows Bootstrap: **0.1.10-w1**
+- QNAP Bootstrap: **1.2.20** / QPKG **4.2.20**
+- Runtime: **1.0.1**
+- Core: **3.18.43**
+- WebUI: **4.7.69**
+- Bridge: **5.14**, protocol **12**
 
-Установка Bootstrap перезапускает GTM и включённые MT5, сохраняя настройки, кампании и данные. Дождитесь свежей готовности терминалов. При сбое используйте известный исправный QPKG через App Center; автоматического отката Bootstrap нет.
+## Windows
 
-## Каталог App Center
+Install [GTM-Setup-0.1.10-w1.exe](https://github.com/juranart/gtm-releases/releases/download/gtm-2026.10.02-auto-updates/GTM-Setup-0.1.10-w1.exe), or use [GTM-Windows-portable-0.1.10-w1.zip](https://github.com/juranart/gtm-releases/releases/download/gtm-2026.10.02-auto-updates/GTM-Windows-portable-0.1.10-w1.zip).
 
-В QNAP App Center откройте **Настройки → Репозиторий приложений → Добавить**:
+Bootstrap checks the stable GitHub release every six hours. It downloads a complete portable bundle, verifies the repository, filename, size, SHA-256 and exact manifest, replaces the bundle atomically, performs a health check and rolls back if startup fails. The running Bootstrap version is shown in the launcher and WebUI.
 
-- Имя: `GTM GitHub`
+## QNAP
+
+In QNAP App Center open **Settings → App Repository → Add**:
+
+- Name: `GTM GitHub`
 - URL: `https://raw.githubusercontent.com/juranart/gtm-releases/main/repo.xml`
 
-Каталог содержит **Bootstrap** для QNAP x86_64, QTS 5.0 и новее.
+The catalog provides Bootstrap for QNAP x86_64 on QTS 5.0 or newer. Existing manually installed systems may need one manual QPKG update before App Center accepts this repository.
 
-Для GTM, ранее установленного вручную, QTS может отклонить установку из нового каталога с сообщением `TelegramMT5CAPOO already uses this name`. Не удаляйте действующее приложение. Выполните ручной переход на 1.2.18, затем используйте обновление Bootstrap из самого GTM. Переход существующей установки на обновления непосредственно через каталог App Center пока не подтверждён.
+Bootstrap 1.2.20 checks the stable GitHub release for Runtime, Core, WebUI and Bridge. Modules are downloaded and verified independently, installed in dependency order, health checked and rolled back on failure. Bootstrap itself remains a QPKG and is updated through App Center or manual QPKG installation.
 
-## Остальные компоненты
+Updates of Runtime, Core or Bridge may restart managed MT5 instances. Runtime and Bridge are included so the release is also a complete installable set for a new system.
 
-**Core** и **WebUI** поставляются отдельными файлами `.capoo-update`. В GTM откройте **Система и обновления**, загрузите и активируйте нужный совместимый компонент согласно описанию его релиза. Обновление Core перезапускает действующие MT5.
+## Integrity and transport
 
-Опубликованные выпуски предназначены для обновления существующей установки. Для нового NAS дополнительно нужны совместимые Runtime и Bridge. Bootstrap-only релиз не является полным комплектом установки и не означает публикацию новых версий остальных компонентов.
+Use [SHA256SUMS.txt](https://github.com/juranart/gtm-releases/releases/download/gtm-2026.10.02-auto-updates/SHA256SUMS.txt) and the platform manifests in the release. Clients reject unexpected repositories, filenames, sizes, hashes, architectures, dependency ranges and Bridge protocol versions.
 
-## Состав релизов
+Persistent localhost TCP/WebSocket is used for Bridge SHADOW telemetry. HTTP remains the only authoritative command path, and the full broker snapshot cadence is unchanged.
 
-- `.qpkg` — Bootstrap для QNAP x86_64.
-- `.capoo-update` — отдельные компоненты GTM, если включены в конкретный выпуск.
-- `repo.xml` в основной ветке — актуальный каталог App Center с точной ссылкой на Bootstrap.
-- `SHA256SUMS.txt` — контрольные суммы опубликованных файлов.
-
-В репозитории размещены установочные материалы. Данные аккаунтов, пароли, журналы NAS и рабочие каталоги MT5 не публикуются.
-
-Подробности исправлений и статус проверок приведены в описании каждого релиза.
+This repository contains installers and release metadata. It does not contain trading accounts, passwords, NAS logs or MT5 working data.
