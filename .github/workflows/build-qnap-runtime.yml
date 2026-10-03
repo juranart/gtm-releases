@@ -43,7 +43,7 @@ jobs:
         shell: bash
         run: |
           python3 builder/pack_module.py runtime runtime-root dist/CAPOO-Runtime_1.0.1_x86_64.capoo-update --version 1.0.1
-          sha256sum --check dist/CAPOO-Runtime_1.0.1_x86_64.capoo-update.sha256
+          (cd dist && sha256sum --check CAPOO-Runtime_1.0.1_x86_64.capoo-update.sha256)
           python3 - <<'PY'
           import hashlib, json, tarfile
           from pathlib import Path
