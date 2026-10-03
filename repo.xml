@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <plugins>
-  <cachechk>202609271659</cachechk>
+  <cachechk>4220</cachechk>
   <item>
     <name>TelegramMT5CAPOO</name>
     <internalName>TelegramMT5CAPOO</internalName>
     <category>GTM</category>
     <type>Utilities</type>
-    <version>4.2.18</version>
+    <version>4.2.20</version>
     <fwVersion>5.0.0</fwVersion>
-    <icon100>https://github.com/juranart/gtm-releases/releases/download/gtm-2026.09.27/TelegramMT5CAPOO.gif</icon100>
-    <icon80>https://github.com/juranart/gtm-releases/releases/download/gtm-2026.09.27/TelegramMT5CAPOO_80.gif</icon80>
-    <description>GTM Bootstrap 1.2.18 для QNAP x86_64. Самообновление Bootstrap из GitHub и автоматическая проверка адаптера MT5. Core и WebUI устанавливаются отдельно в разделе «Система и обновления». Для новой установки также требуются Runtime и Bridge.</description>
+    <icon100>https://github.com/juranart/gtm-releases/releases/download/gtm-2026.10.02-auto-updates/TelegramMT5CAPOO.gif</icon100>
+    <icon80>https://github.com/juranart/gtm-releases/releases/download/gtm-2026.10.02-auto-updates/TelegramMT5CAPOO_80.gif</icon80>
+    <description>GTM Bootstrap 1.2.20 для QNAP x86_64. Управление изолированными терминалами MT5. Core и WebUI устанавливаются отдельно в разделе «Система и обновления». Для новой установки также требуются Runtime и Bridge.</description>
     <developer>GTM</developer>
     <maintainer>juranart</maintainer>
     <developerLink>https://github.com/juranart/gtm-releases</developerLink>
-    <changeLog>https://github.com/juranart/gtm-releases/releases/tag/bootstrap-1.2.18</changeLog>
-    <tutorialLink>https://github.com/juranart/gtm-releases/releases/tag/bootstrap-1.2.18</tutorialLink>
+    <changeLog>https://github.com/juranart/gtm-releases/releases/tag/gtm-2026.10.02-auto-updates</changeLog>
+    <tutorialLink>https://github.com/juranart/gtm-releases/releases/tag/gtm-2026.10.02-auto-updates</tutorialLink>
     <language>Russian</language>
     <platform>
       <platformID>TS-NASX86</platformID>
-      <location>https://github.com/juranart/gtm-releases/releases/download/bootstrap-1.2.18/TelegramMT5CAPOO-bootstrap_1.2.18_x86_64.qpkg</location>
+      <location>https://github.com/juranart/gtm-releases/releases/download/gtm-2026.10.02-auto-updates/TelegramMT5CAPOO-bootstrap_1.2.20_x86_64.qpkg</location>
     </platform>
   </item>
 </plugins>
